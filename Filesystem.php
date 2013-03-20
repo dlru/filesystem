@@ -43,10 +43,10 @@
 
 namespace DL;
 
-use DL\Filesystem\Item as FS_Item;
-use DL\Filesystem\Item\File as FSI_File;
-use DL\Filesystem\Item\Link as FSI_Link;
-use DL\Filesystem\Item\Directory as FSI_Directory;
+use DL\Filesystem\Item;
+use DL\Filesystem\Item\File;
+use DL\Filesystem\Item\Link;
+use DL\Filesystem\Item\Directory;
 use DL\Filesystem\Exception as FS_Exception;
 
 /**
@@ -183,11 +183,11 @@ abstract class Filesystem {
             );
         }
         switch (true) {
-            case is_file($path): return new FSI_File($path, false);
+            case is_file($path): return new File($path, false);
             // Весьма тонкий момент - ссылка у нас это тоже директория,
             // поэтому необходимо сначала проверить элемент "на ссылку"
-            case $this->_is_link($path): return new FSI_Link($path, false);
-            case is_dir($path): return new FSI_Directory($path, false);
+            case $this->_is_link($path): return new Link($path, false);
+            case is_dir($path): return new Directory($path, false);
             default:
                 // Странная ситуация, но все же и ее
                 throw new FS_Exception( // ... обработаем!
@@ -205,7 +205,7 @@ abstract class Filesystem {
      * @return Filesystem\Item\File
      */
     public function file($path) {
-        return new FSI_File($path);
+        return new File($path);
     }
 
 
@@ -217,7 +217,7 @@ abstract class Filesystem {
      * @return Filesystem\Item\Directory
      */
     public function dir($path) {
-        return new FSI_Directory($path);
+        return new Directory($path);
     }
 
 
@@ -229,7 +229,7 @@ abstract class Filesystem {
      * @return Filesystem\Item\Link
      */
     public function link($path) {
-        return new FSI_Link($path);
+        return new Link($path);
     }
 
 
@@ -273,7 +273,7 @@ abstract class Filesystem {
             if (isset($temp_id)) { $this->_recycle_bin->restore($temp_id); }
             throw new FS_Exception('Cannot make file "' . $path . '"', 0, $e);
         }
-        $item = new FSI_File($path, false);
+        $item = new File($path, false);
         $this->_transaction->log($item, 'delete');
         return $item;
     }
@@ -319,7 +319,7 @@ abstract class Filesystem {
             if (isset($temp_id)) { $this->_recycle_bin->restore($temp_id); }
             throw new FS_Exception('Cannot make directory "' . $path . '"', 0, $e);
         }
-        $item = new FSI_Directory($path, false);
+        $item = new Directory($path, false);
         $this->_transaction->log($item, 'delete');
         return $item;
     }
@@ -365,7 +365,7 @@ abstract class Filesystem {
      * @throws Filesystem\Exception
      */
     private static function _cast_directory_item($item) {
-        if (!is_object($item) || !($item instanceof FS_Item) || !$item->isDir()) {
+        if (!is_object($item) || !($item instanceof Item) || !$item->isDir()) {
             throw new FS_Exception('Invalid directory parameter type');
         }
     }
@@ -410,7 +410,7 @@ abstract class Filesystem {
                     . (isset($pointer) ? ' points to "' . $pointer . '"' : ''), 0, $e
             );
         }
-        $item = new FSI_Link($path, false);
+        $item = new Link($path, false);
         $this->_transaction->log($item, 'delete');
         return $item;
     }

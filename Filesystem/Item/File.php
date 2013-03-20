@@ -43,7 +43,7 @@
 
 namespace DL\Filesystem\Item;
 
-use DL\Filesystem\Item as FS_Item;
+use DL\Filesystem\Item;
 use DL\Filesystem\Exception as FS_Exception;
 
 /**
@@ -53,7 +53,7 @@ use DL\Filesystem\Exception as FS_Exception;
  * @subpackage Filesystem
  * @author Victor Yasinovsky
  */
-class File extends FS_Item {
+class File extends Item {
 
 
 

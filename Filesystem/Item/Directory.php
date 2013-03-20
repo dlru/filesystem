@@ -43,8 +43,7 @@
 
 namespace DL\Filesystem\Item;
 
-use DL\Filesystem\Item as FS_Item;
-use DL\Filesystem\Item\Directory\Iterator as FSID_Iterator;
+use DL\Filesystem\Item;
 
 /**
  * Представление директории
@@ -53,7 +52,7 @@ use DL\Filesystem\Item\Directory\Iterator as FSID_Iterator;
  * @subpackage Filesystem
  * @author Victor Yasinovsky
  */
-class Directory extends FS_Item implements \IteratorAggregate {
+class Directory extends Item implements \IteratorAggregate {
 
 
 
@@ -89,12 +88,12 @@ class Directory extends FS_Item implements \IteratorAggregate {
     /**
      * Возвращает итератор диреториии
      *
-     * @return FSID_Iterator
+     * @return Directory\Iterator|\Traversable
      * @todo Придумать механизм кэширования
      */
     public function getIterator() {
         // Здесь через $this->path() для проверки
-        return new FSID_Iterator($this->path());
+        return new Directory\Iterator($this->path());
     }
 
 
